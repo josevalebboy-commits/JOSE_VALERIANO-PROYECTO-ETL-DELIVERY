@@ -34,7 +34,7 @@ print(df_menus.shape)
 ```
 - *resultado*
 
-![I1](/Workspace/Users/josevalebboy@gmail.com/JOSE_VALERIANO-PROYECTO-ETL-DELIVERY/Prints_proyecto/print_1.PNG)
+![I1](./Prints_proyecto/print_1.PNG)
 
 ``` python
 print(df_restaurantes.dtypes)
@@ -43,21 +43,21 @@ print(df_menus.dtypes)
 ```
 - *resultado*
 
-![I1](/Workspace/Users/josevalebboy@gmail.com/JOSE_VALERIANO-PROYECTO-ETL-DELIVERY/Prints_proyecto/print_2.PNG)
+![I1](./Prints_proyecto/print_2.PNG)
 
 ``` python
 print(df_restaurantes.isnull().sum())
 ```
 - *resultado*
 
-![I1](/Workspace/Users/josevalebboy@gmail.com/JOSE_VALERIANO-PROYECTO-ETL-DELIVERY/Prints_proyecto/print_3.PNG)
+![I1](./Prints_proyecto/print_3.PNG)
 
 ``` python
 print(df_menus.isnull().sum())
 ```
 - *resultado*
 
-![I1](/Workspace/Users/josevalebboy@gmail.com/JOSE_VALERIANO-PROYECTO-ETL-DELIVERY/Prints_proyecto/print_4.PNG)
+![I1](./Prints_proyecto/print_4.PNG)
 
 
 
