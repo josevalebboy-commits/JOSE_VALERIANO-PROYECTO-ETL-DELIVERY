@@ -59,6 +59,124 @@ print(df_menus.isnull().sum())
 
 ![I1](./Prints_proyecto/print_4.PNG)
 
+## Parte 2 - Ingeniería de Características y Limpieza (Transform)
+Para este apartado, realizaremos limpieza y cambios en nuestros dataframes trabajados previamente.
+
+En df_restaurantes:
+1. Transformaremos la columna rango_de_precios, que contiene símbolos ($, $$, etc), con un diccionario para que la lectura de resultados sea mas entendible:
+``` python
+df_restaurantes["price_range"] = df_restaurantes["price_range"].replace({
+    "$": "Económico",
+    "$$": "Moderadamente caro",
+    "$$$": "Caro",
+    "$$$$": "Muy caro"
+})
+```
+Por lo que luego del cambio se veria asi:
+``` python
+df_restaurantes["price_range"].value_counts(dropna=False)
+```
+- *resultado* 
+
+![I1](./Prints_proyecto/print_5.PNG)
+
+2. En la columna dirección_completa, que contiene informacion de la calle, ciudad, estado y código postal separados por comas, realizaremos un split para crear tres nuevas columnas independientes: calle, ciudad y estado_zip.
+``` python
+df_restaurantes[["calle", "ciudad", "estado_zip"]] = (
+    df_restaurantes["full_address"]
+    .str.split(",", expand=True, n=2)
+)
+```
+Por lo que luego del cambio se veria asi:
+``` python
+df_restaurantes[
+    ["full_address", "calle", "ciudad", "estado_zip"]
+].head(10)
+```
+- *resultado*
+
+![I1](./Prints_proyecto/print_6.PNG)
+
+3. Eliminaremos los restaurantes que no tengan puntaje (score nulo) o cuyo puntaje sea 0 y el estandar de la columna category será a minúsculas.
+``` python
+df_restaurantes = df_restaurantes[
+    (df_restaurantes["score"].notna()) &
+    (df_restaurantes["score"] != 0)
+]
+```
+``` python
+df_restaurantes["category"] = df_restaurantes["category"].str.lower()
+```
+Por lo que luego del cambio se veria asi:
+``` python
+df_restaurantes["category"].head()
+```
+- *resultado*
+
+![I1](./Prints_proyecto/print_7.PNG)
+
+En df_menus:
+1. La columna price viene como texto (ej. "15,99 USD"). Por lo que usaremos una funcion para eliminar el texto " USD", reemplazar la coma por un punto, y castear el resultado a formato decimal (float).
+``` python
+df_menus["price"] = (
+    df_menus["price"]
+    .str.replace(" USD", "", regex=False)
+    .str.replace(",", ".", regex=False)
+    .astype(float)
+)
+```
+Por lo que luego del cambio se veria asi:
+``` python
+df_menus["price"].head(10)
+```
+- *resultado*
+
+![I1](./Prints_proyecto/print_8.PNG)
+
+2. Eliminaremos los ítems del menú con precio igual a 0.0 o nulos.
+``` python
+df_menus = df_menus[
+    (df_menus["price"].notna()) &
+    (df_menus["price"] != 0.0)
+]
+```
+### Optimización y Cruce (Control de Memoria RAM)
+* Para no colapsar la memoria del servidor, filtraremos en df_restaurantes, para quedarnos únicamente con aquellos que tengan más de 100 calificaciones (ratings).
+``` python
+df_restaurantes = df_restaurantes[
+    (df_restaurantes["ratings"].notna()) &
+    (df_restaurantes["ratings"] > 100)
+]
+```
+* Realizamos un INNER JOIN entre el df_restaurantes filtrado y df_menus
+utilizando el ID del restaurante y guardamos este cruce en un DataFrame llamado df_master.
+``` python
+df_master = pd.merge(
+    df_restaurantes,
+    df_menus,
+    left_on="id",
+    right_on="restaurant_id",
+    how="inner"
+)
+```
+- *resultado*
+
+![I1](./Prints_proyecto/print_9.PNG)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
